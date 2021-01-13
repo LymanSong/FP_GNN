@@ -11,7 +11,7 @@ if you make use of the code/experiment in you work, please cite our paper.
 
 ## Installation
 
-Install PyTorch following the instuctions on the [official website] (https://pytorch.org/). The code has been tested over PyTorch 0.4.1 and 1.0.0 versions.
+Install PyTorch following the instuctions on the [official website] (https://pytorch.org/). The code has been tested over PyTorch 1.7.0 and DGL 0.5.2 versions.
 
 Then install the other dependencies.
 
