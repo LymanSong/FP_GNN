@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ## Test run
 
-For training and test (for validation):
+For training and test:
 
 ```python
 python train_test.py
