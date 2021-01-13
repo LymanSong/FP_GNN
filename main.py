@@ -73,11 +73,11 @@ args = parser.parse_args()
 device = torch.device("cuda:" + str(args.device)) if torch.cuda.is_available() else torch.device("cpu")
 root_path = os.getcwd()
 arguments_str = print_options(args)
-# dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device, args)    
+dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device, args)    
 
 os.chdir(root_path)
 # write_data(dataset, args.dataset + '_' + args.feature_normalize)
-dataset = load_data(args.dataset + '_' + args.feature_normalize)
+# dataset = load_data(args.dataset + '_' + args.feature_normalize)
 
 # model setting
 # n_features = dataset.FP_set[1][2].shape[1]
