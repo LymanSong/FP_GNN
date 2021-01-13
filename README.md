@@ -23,21 +23,30 @@ pip install -r requirements.txt
 
 ## Test run
 
-Run test code as follows:
+For training and test (for validation):
 
+```python
+python train_test.py
 ```
+
+For test code:
+
+```python
 python test_code.py
 ```
 
-The default arguments for test code are 
-
-- aggregator_type: lstm
-- checkpoint: ./checkpoint
-- dataset: cubicasa_test
-- feature_normalize: standard
-- gnn_model: sage
-- hidden_dim: 128
-- num_layers: 6.
 
 
+## Scripts and directories
+
+* Scripts
+  * main: main script for construction ,training and test for the framework
+  * dataset_module: dataset construction
+  * models: code implementation of GNN models
+  * vectorization: code implementation for image pre-processing, vectorization, and RAG conversion
+  * train_test: a script for training and test for GNN models
+* Directories
+  * checkpoint: pre-trained GNN models
+  * output: predicted .shp files
+  * dataset: used dataset images and vector files (fps) and pre-processed .bin files (preprocessed) 
 
