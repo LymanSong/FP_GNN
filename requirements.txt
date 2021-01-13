@@ -1,0 +1,8 @@
+dgl-cu101==0.5.2
+geojson==2.5.0
+geopandas==0.8.1
+networkx==2.5
+opencv-python==4.4.0.46
+rasterio==1.1.7
+Shapely==1.7.1
+torch==1.7.0+cu101
