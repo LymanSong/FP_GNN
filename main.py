@@ -22,7 +22,7 @@ from models import *
 from vectorize import *
 from dataset_module import FP_dataset
 from train_test import train
-from test_ import test
+from test_code import test
 
 parser = argparse.ArgumentParser(description='PyTorch graph convolutional neural net for floor plans objects classification')
 parser.add_argument('--dataset', type=str, default= "cubicasa", choices=["cubicasa", "UOS", "UOS_aug" ],
@@ -78,11 +78,6 @@ dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device,
 os.chdir(root_path)
 # write_data(dataset, args.dataset + '_' + args.feature_normalize)
 # dataset = load_data(args.dataset + '_' + args.feature_normalize)
-
-# model setting
-# n_features = dataset.FP_set[1][2].shape[1]
-# n_labels = torch.max(torch.cat([i[3] for i in dataset.FP_set])).item() + 1
-
 
 
 if args.fold_idx == 0:
