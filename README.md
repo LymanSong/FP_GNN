@@ -40,7 +40,7 @@ python test_code.py
 ## Scripts and directories
 
 * Scripts
-  * main: main script for construction ,training and test for the framework
+  * main: main script for constructing the dataset and train/test for the framework
   * dataset_module: dataset construction
   * models: code implementation of GNN models
   * vectorization: code implementation for image pre-processing, vectorization, and RAG conversion
@@ -49,4 +49,8 @@ python test_code.py
   * checkpoint: pre-trained GNN models
   * output: predicted .shp files
   * dataset: used dataset images and vector files (fps) and pre-processed .bin files (preprocessed) 
+
+
+
+## Note
 
