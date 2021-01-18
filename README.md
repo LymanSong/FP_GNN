@@ -5,7 +5,7 @@ paper_citation [link]
 
 
 
-if you make use of the code/experiment in you work, please cite our paper.
+if you make use of the code/experiment in you work, please cite the paper.
 
 
 
