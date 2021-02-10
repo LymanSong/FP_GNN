@@ -26,8 +26,8 @@ parser.add_argument('--dataset', type=str, default= "cubicasa_test", choices=["c
                     help='name of dataset (default: cubicasa_test)')
 parser.add_argument('--device', type=int, default=0,
                     help='which gpu to use if any (default: 0)')
-parser.add_argument('--gnn_model', type=str, default='sage', choices = ["sage", "gin", "gcn", "mpnn", 'ewnn'],
-                    help='model to be used to analyze floor plans (sage, gin, gcn, mpnn, ewnn)')
+parser.add_argument('--gnn_model', type=str, default='dwgnn', choices = ["sage", "gin", "gcn", "mpnn", 'dwgnn'],
+                    help='model to be used to analyze floor plans (sage, gin, gcn, mpnn, dwgnn)')
 parser.add_argument('--aggregator_type', type=str, default='lstm', choices=["pool", "lstm", "mean", "max", "sum"],
                     help='an aggregator function for GNN model')
 parser.add_argument('--feature_normalize', type=str, default='standard', choices = ['standard', 'minmax', 'none'],
@@ -56,8 +56,8 @@ def test(args, test_files, device, dataset, root_path, test = True):
         model = SAGE(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
     elif args.gnn_model == 'gcn':
         model = GCN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers).to(device)
-    elif args.gnn_model == 'ewnn':
-        model = EWNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
+    elif args.gnn_model == 'dwgnn':
+        model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
     elif args.gnn_model == 'gin':
         model = GIN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers, num_mlp_layers = args.num_mlp_layers, aggregator_type = args.aggregator_type).to(device)
     PATH = os.path.join(args.checkpoint, args.dataset.split(sep = '_')[0], args.gnn_model + '_' + args.aggregator_type + '_' + args.load_epoch + '_net.pth')
@@ -73,7 +73,7 @@ def test(args, test_files, device, dataset, root_path, test = True):
         
         node_features = torch.stack([FP[4].ndata[j] for j in [i for i in FP[4].ndata]]).T # shape : (n_node, n_features)
         node_features = node_features.type(torch.FloatTensor).to(device)
-        if args.gnn_model in ['mpnn', 'ewnn']:
+        if args.gnn_model in ['mpnn', 'dwgnn']:
             edge_features = FP[4].edata['edge_dists']
         else:
             edge_features = None
