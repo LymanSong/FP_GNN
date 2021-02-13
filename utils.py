@@ -109,7 +109,7 @@ def Zernikemoment(src, n, m):
     if src.dtype != np.float32:
         src = np.where(src > 0, 0, 1).astype(np.float32)
     if len(src.shape) == 3:
-        print('the input image src should be in gray')
+        print('the input image src should be in gray scale')
         return
 
     H, W = src.shape
@@ -176,8 +176,8 @@ def normalizing2(data_ary, mode = 'standard'):
 
 def get_moments(poly_objs, G, zm = 'zm42', mm = 'nu11'):    
     moments = pd.DataFrame(columns = [zm, mm])
-    pbar = tqdm(range(len(poly_objs)), desc = 'extracting moments...')
-    for i in pbar:
+    # pbar = tqdm(range(len(poly_objs)), desc = 'extracting moments...')
+    for i in range(len(poly_objs)):
         img = rasterize(poly_objs, i, affinity = True)
         moments = moments.append(({zm:Zernikemoment(img, n = 4, m = 2)[1], mm:abs(cv2.moments(img)[mm])}), ignore_index =True)
 

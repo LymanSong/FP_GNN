@@ -90,7 +90,9 @@ class FP_dataset(Dataset):
         data = []
         filenames = natsort.natsorted(self.filename)
         if step == 1:
-            for filename in natsort.natsorted(self.filename):
+            pbar = tqdm(range(self.__len__()), desc = 'making vectors and RAGs...')
+            for pos in pbar:
+                filename = filenames[pos]
                 file_path = os.path.join(self.fps_path, filename)
                 gdf = vectorization(file_path, file_path, filename, '.png')
                 G, nodes, edges = build_FPgraph_RAG(file_path, file_path, filename, '_polys')

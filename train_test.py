@@ -15,7 +15,7 @@ from models import *
 import time
 import numpy as np
 from tqdm import tqdm
-# torch.backends.cudnn.enabled = False
+torch.backends.cudnn.enabled = False
 def model_save(model, epoch, loss, opt, args, record, session_record, e_time, latest = False):
     if os.path.exists(os.path.join(args.checkpoint, args.dataset)) == False:
         os.mkdir(os.path.join(args.checkpoint, args.dataset))

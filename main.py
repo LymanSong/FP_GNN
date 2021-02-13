@@ -24,7 +24,7 @@ from dataset_module import FP_dataset
 from train_test import train
 from test_code import test
 
-parser = argparse.ArgumentParser(description='PyTorch graph convolutional neural net for floor plans objects classification')
+parser = argparse.ArgumentParser(description='PyTorch graph neural net for floor plans objects classification')
 parser.add_argument('--dataset', type=str, default= "cubicasa", choices=["cubicasa", "UOS", "UOS_aug" ],
                     help='name of dataset (default: cubicasa)')
 parser.add_argument('--device', type=int, default=0,
@@ -41,8 +41,8 @@ parser.add_argument('--seed', type=int, default=np.random.permutation(1).item(),
                     help='random seed for splitting the dataset into 10 (default: 0)')
 parser.add_argument('--gnn_model', type=str, default='dwgnn', choices = ["sage", "gin", "gcn", 'dwgnn'],
                     help='model to be used to analyze floor plans (sage, gin, gcn, dwgnn)')
-parser.add_argument('--aggregator_type', type=str, default='sum', choices=["pool", "lstm", "mean", "max", "sum"],
-                help='an aggregator function for GNN model')
+parser.add_argument('--aggregator_type', type=str, default='lstm', choices=["pool", "lstm", "mean", "max", "sum"],
+                    help='an aggregator function for GNN model')
 parser.add_argument('--num_layers', type=int, default=6,
                     help='number of layers INCLUDING the input one. has to be greater than 1.')
 parser.add_argument('--num_mlp_layers', type=int, default=3,
@@ -54,19 +54,17 @@ parser.add_argument('--final_dropout', type=float, default=0.5,
 parser.add_argument('--feature_normalize', type=str, default='standard', choices = ['standard', 'minmax', 'none'],
                     help='normalize feature matrix (default: standard).')
 parser.add_argument('--train_percen', type=float, default=0.5,
-                help='percentage of training data in whole dataset.')
-# parser.add_argument('--val_percen', type=float, default=0.2,
-#                 help='percentage of training data in whole dataset.')
+                    help='percentage of training data in whole dataset.')
 parser.add_argument('--summary_dir', type=str, default='./summary',
-                help='local dircetory to save the summary of the session.')
+                    help='local dircetory to save the summary of the session.')
 parser.add_argument('--return_output', type=bool, default=False,
-                help='if true, export predicted classes with test files')
+                    help='if true, export predicted classes with test files')
 parser.add_argument('--checkpoint', type=str, default='./checkpoint',
-                help='local dircetory to save the model')
+                    help='local dircetory to save the model')
 parser.add_argument('--continue_train', type=bool, default=False,
-                help='continue training: load the pretrained model')
+                    help='continue training: load the pretrained model')
 parser.add_argument('--load_epoch', type=str, default='latest',
-                help='load the pretrained model at epoch n, if n is \'latest\', load the latest epoch model')
+                    help='load the pretrained model at epoch n, if n is \'latest\', load the latest epoch model')
 
 #general setting
 args = parser.parse_args()

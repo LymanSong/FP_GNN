@@ -28,7 +28,7 @@ parser.add_argument('--device', type=int, default=0,
                     help='which gpu to use if any (default: 0)')
 parser.add_argument('--gnn_model', type=str, default='dwgnn', choices = ["sage", "gin", "gcn", "mpnn", 'dwgnn'],
                     help='model to be used to analyze floor plans (sage, gin, gcn, mpnn, dwgnn)')
-parser.add_argument('--aggregator_type', type=str, default='lstm', choices=["pool", "lstm", "mean", "max", "sum"],
+parser.add_argument('--aggregator_type', type=str, default='mean', choices=["pool", "lstm", "mean", "max", "sum"],
                     help='an aggregator function for GNN model')
 parser.add_argument('--feature_normalize', type=str, default='standard', choices = ['standard', 'minmax', 'none'],
                     help='normalize feature matrix (default: standard).')
@@ -60,13 +60,18 @@ def test(args, test_files, device, dataset, root_path, test = True):
         model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
     elif args.gnn_model == 'gin':
         model = GIN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers, num_mlp_layers = args.num_mlp_layers, aggregator_type = args.aggregator_type).to(device)
-    PATH = os.path.join(args.checkpoint, args.dataset.split(sep = '_')[0], args.gnn_model + '_' + args.aggregator_type + '_' + args.load_epoch + '_net.pth')
+    
+    
+    if args.gnn_model != 'gcn':
+        PATH = os.path.join(args.checkpoint, args.dataset.split(sep = '_')[0], args.gnn_model + '_' + args.aggregator_type + '_' + args.load_epoch + '_net.pth')
+    else:
+        PATH = os.path.join(args.checkpoint, args.dataset.split(sep = '_')[0], args.gnn_model + '_' + args.load_epoch + '_net.pth')
     model, opt, cur_epoch, loss, record, session_record, e_time = model_load(model, PATH, n_features, n_labels, args, device)
     model.eval()
     filenames = [fp[0] for fp in test_files]
     
     for filename in filenames:
-        # get testfile from the dataset and do predict with trained model
+        # get testfile from the dataset and predict with trained model
         FP = dataset.__getitem_by_name__(filename)
         filename = FP[0]
         x = FP[4]

@@ -1,0 +1,93 @@
+----------------- Options ---------------
+          aggregator_type: lstm                          
+               checkpoint: ./checkpoint                  
+           continue_train: False                         
+                  dataset: cubicasa                      
+                   device: 0                             
+                   epochs: 1000                          
+        feature_normalize: standard                      
+            final_dropout: 0.5                           
+                 fold_idx: 0                             
+                gnn_model: sage                          
+               hidden_dim: 128                           
+               load_epoch: latest                        
+                       lr: 0.01                          
+               num_layers: 6                             
+           num_mlp_layers: 3                             
+             random_split: False                         
+            return_output: False                         
+                     seed: 0                             
+              summary_dir: ./summary                     
+             train_percen: 0.5                           
+----------------- End -------------------Epoch: 0051 loss_train: 0.0011 acc_train: 0.9997
+	    loss_test: 0.2726 acc_test: 0.9508
+Epoch: 0101 loss_train: 0.0523 acc_train: 0.9834
+	    loss_test: 0.2051 acc_test: 0.9515
+Epoch: 0151 loss_train: 0.0006 acc_train: 0.9998
+	    loss_test: 0.2716 acc_test: 0.9577
+Epoch: 0201 loss_train: 0.0005 acc_train: 0.9997
+	    loss_test: 0.2912 acc_test: 0.9575
+Epoch: 0251 loss_train: 0.0007 acc_train: 0.9999
+	    loss_test: 0.2502 acc_test: 0.9619
+Epoch: 0301 loss_train: 0.0004 acc_train: 0.9998
+	    loss_test: 0.2733 acc_test: 0.9628
+Epoch: 0351 loss_train: 0.0007 acc_train: 0.9998
+	    loss_test: 0.2410 acc_test: 0.9628
+Epoch: 0401 loss_train: 0.0004 acc_train: 0.9998
+	    loss_test: 0.2751 acc_test: 0.9633
+Epoch: 0451 loss_train: 0.0003 acc_train: 0.9999
+	    loss_test: 0.2898 acc_test: 0.9630
+Epoch: 0501 loss_train: 0.0233 acc_train: 0.9938
+	    loss_test: 0.3935 acc_test: 0.9330
+Epoch: 0551 loss_train: 0.0003 acc_train: 0.9998
+	    loss_test: 0.2651 acc_test: 0.9638
+Epoch: 0601 loss_train: 0.0004 acc_train: 0.9997
+	    loss_test: 0.2845 acc_test: 0.9630
+Epoch: 0651 loss_train: 0.0003 acc_train: 0.9998
+	    loss_test: 0.2969 acc_test: 0.9637
+Epoch: 0701 loss_train: 0.0003 acc_train: 0.9997
+	    loss_test: 0.3074 acc_test: 0.9631
+Epoch: 0751 loss_train: 0.0333 acc_train: 0.9889
+	    loss_test: 0.2262 acc_test: 0.9571
+Epoch: 0801 loss_train: 0.0003 acc_train: 0.9999
+	    loss_test: 0.2618 acc_test: 0.9637
+Epoch: 0851 loss_train: 0.0003 acc_train: 0.9998
+	    loss_test: 0.2760 acc_test: 0.9639
+Epoch: 0901 loss_train: 0.0003 acc_train: 0.9998
+	    loss_test: 0.2879 acc_test: 0.9645
+Epoch: 0951 loss_train: 0.0004 acc_train: 0.9997
+	    loss_test: 0.2549 acc_test: 0.9637
+Epoch: 1001 loss_train: 0.0003 acc_train: 0.9998
+	    loss_test: 0.2734 acc_test: 0.9649
+class 0[predict]: 8291, percentage: 0.41
+class 0[labeled]: 8144, percentage: 0.4
+class 1[predict]: 1688, percentage: 0.08
+class 1[labeled]: 1735, percentage: 0.08
+class 2[predict]: 4283, percentage: 0.21
+class 2[labeled]: 4305, percentage: 0.21
+class 3[predict]: 3228, percentage: 0.16
+class 3[labeled]: 3273, percentage: 0.16
+class 4[predict]: 1143, percentage: 0.06
+class 4[labeled]: 1083, percentage: 0.05
+class 5[predict]: 1320, percentage: 0.06
+class 5[labeled]: 1390, percentage: 0.07
+class 6[predict]:  197, percentage: 0.01
+class 6[labeled]:  198, percentage: 0.01
+class 7[predict]:  315, percentage: 0.02
+class 7[labeled]:  337, percentage: 0.02
+                      precision    recall  f1-score   support
+
+    class 0(objects)     0.9616    0.9790    0.9702      8144
+       class 1(wall)     0.9573    0.9314    0.9442      1735
+     class 2(window)     0.9911    0.9861    0.9886      4305
+       class 3(door)     0.9678    0.9545    0.9611      3273
+      class 4(stair)     0.9239    0.9751    0.9488      1083
+       class 5(room)     0.9515    0.9036    0.9269      1390
+      class 6(porch)     0.8528    0.8485    0.8506       198
+class 7(outer space)     0.9556    0.8932    0.9233       337
+
+            accuracy                         0.9645     20465
+           macro avg     0.9452    0.9339    0.9392     20465
+        weighted avg     0.9646    0.9645    0.9644     20465
+
+ best acc : 0.9648972267355465

@@ -73,7 +73,7 @@ def vectorization(input_path, output_path, filename, extension, bbox_on = False,
     
     #buffered polygons(shapely)
     df = gpd.read_file(filename + '_polys.shp')
-    df = df.buffer(0.5, 10, cap_style = 2, join_style = 2)
+    df = df.buffer(1, 10, cap_style = 2, join_style = 2)
     
     #remove useless and small polygons whose area is less than threshold
     to_pop = [i for i in range(len(df)) if df.iloc[i].area < min_area]
