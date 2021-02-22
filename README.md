@@ -1,7 +1,7 @@
 # FP_GNN
 This repository is Pytorch ans DGL implementation of the experiments in the following paper:
 
-paper_citation [link]
+Song, J.; Yu, K. Framework for Indoor Elements Classification via Inductive Learning on Floor Plan Graphs. Preprints 2021, 2021010584 (doi: 10.20944/preprints202101.0584.v1).
 
 
 
