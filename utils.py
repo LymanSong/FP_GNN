@@ -172,6 +172,8 @@ def normalizing2(data_ary, mode = 'standard'):
     elif mode == 'minmax':
         min_max_scaler = preprocessing.MinMaxScaler()
         result = min_max_scaler.fit_transform(data_ary)
+    else:
+        result = data_ary
     return np.squeeze(result)
 
 def get_moments(poly_objs, G, zm = 'zm42', mm = 'nu11'):    

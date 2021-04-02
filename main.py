@@ -24,6 +24,9 @@ from dataset_module import FP_dataset
 from train_test import train
 from test_code import test
 
+print('weights = torch.div(weights.squeeze(dim = 2), weights.sum(1)).unsqueeze(dim = 2)        soft_ed = m(torch.FloatTensor(np.squeeze(np.apply_along_axis(scaling, 1, weights.cpu().numpy()), axis = 2))).to(self.device)')
+
+
 parser = argparse.ArgumentParser(description='PyTorch graph neural net for floor plans objects classification')
 parser.add_argument('--dataset', type=str, default= "cubicasa", choices=["cubicasa", "UOS", "UOS_aug" ],
                     help='name of dataset (default: cubicasa)')
@@ -31,7 +34,7 @@ parser.add_argument('--device', type=int, default=0,
                     help='which gpu to use if any (default: 0)')
 parser.add_argument('--random_split', type=bool, default=False,
                     help='if True, suffle files when split train/test dataset. If False, get list from local directory')
-parser.add_argument('--epochs', type=int, default=1000,
+parser.add_argument('--epochs', type=int, default=200,
                     help='number of epochs to train (default: 1000)')
 parser.add_argument('--lr', type=float, default=0.01,
                     help='learning rate (default: 0.01)')
@@ -65,13 +68,21 @@ parser.add_argument('--continue_train', type=bool, default=False,
                     help='continue training: load the pretrained model')
 parser.add_argument('--load_epoch', type=str, default='latest',
                     help='load the pretrained model at epoch n, if n is \'latest\', load the latest epoch model')
+parser.add_argument('--dataset_load', type=bool, default=True)
 
 #general setting
 args = parser.parse_args()
 device = torch.device("cuda:" + str(args.device)) if torch.cuda.is_available() else torch.device("cpu")
 root_path = os.getcwd()
 arguments_str = print_options(args)
-dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device, args)    
+if args.dataset_load == False:
+    dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device, args)
+    torch.save(dataset, os.path.join(root_path, 'dataset_st.pt'))
+else:
+    dataset = torch.load(os.path.join(root_path, 'dataset_st.pt'))
+    if dataset.dataset_name != args.dataset:
+        dataset = FP_dataset(os.path.join(os.getcwd(), 'dataset'), args.dataset, device, args)
+        torch.save(dataset, os.path.join(root_path, 'dataset.pt'))
 
 os.chdir(root_path)
 # write_data(dataset, args.dataset + '_' + args.feature_normalize)

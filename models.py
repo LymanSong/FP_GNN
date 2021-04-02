@@ -11,11 +11,34 @@ import torch.nn.functional as F
 from dgl import nn as dglnn
 from dgl import utils as du
 import dgl.function as fn
+from sklearn import preprocessing
+import numpy as np
 
+def scaling(x):
+    scaler = preprocessing.MinMaxScaler()
+    if len(x.shape) != 2:
+        x = x.reshape(-1, 1)
+    return scaler.fit_transform(x)
+class PyTMinMaxScaler(object):
+    """
+    Transforms each channel to the range [0, 1].
+    """    
+    def __call__(self, tensor):
+        tensor = tensor.clone()
+        if tensor.shape[-1] == 1:
+            tensor = torch.squeeze(tensor, dim = -1)
+        for ch in tensor:
+            if len(ch) != 1:
+                min_ = ch.min(dim=0)[0]
+                scale = ch.max(dim=0)[0].sub(min_)
+                ch.sub_(min_).div_(scale)        
+        return torch.unsqueeze(tensor, dim = -1)
+scaler = PyTMinMaxScaler()
 class EWConv(nn.Module):
-    def __init__(self, in_feats, out_feats, edge_func, aggregator_type='mean'):
+    def __init__(self, in_feats, out_feats, edge_func, aggregator_type='mean', device = 'cpu'):
         super().__init__()
         self._in_src_feats, self._in_dst_feats = du.expand_as_pair(in_feats)
+        self.device = device
         self.out_feats = out_feats
         self.edge_func = edge_func
         self.aggregator_type = aggregator_type
@@ -38,10 +61,14 @@ class EWConv(nn.Module):
     def udf_u_mul_e(self, nodes):
         m = self.edge_func
         weights = nodes.mailbox['edge_features']
-        weights = torch.div(weights.squeeze(dim = 2), weights.sum(1)).unsqueeze(dim = 2)
-        softmin_ed = m(weights)
-        # num_edges = nodes.mailbox['edge_features'].shape[1]
-        res = softmin_ed * nodes.mailbox['neighbors']
+        
+        # weights = torch.div(weights.squeeze(dim = 2), weights.sum(1)).unsqueeze(dim = 2)
+        # soft_ed = m(weights)
+        # soft_ed = m(scaler(weights))
+        # soft_ed_ = m(scaler(weights))
+        soft_ed = m(torch.FloatTensor(np.squeeze(np.apply_along_axis(scaling, 1, weights.cpu().numpy()), axis = 2))).to(self.device)
+        
+        res = soft_ed * nodes.mailbox['neighbors']
         if self.aggregator_type == 'sum':
             res = res.sum(axis = 1)
         elif self.aggregator_type == 'mean':
@@ -66,7 +93,7 @@ class EWConv(nn.Module):
             return result
 
 class DWGNN(nn.Module):
-    def __init__(self, in_feats, hid_feats, out_feats, edge_feats, num_layers, aggregator_type):
+    def __init__(self, in_feats, hid_feats, out_feats, edge_feats, num_layers, aggregator_type, device):
         super().__init__()
         self.num_layers = num_layers
         self.layers = torch.nn.ModuleList()
@@ -77,12 +104,12 @@ class DWGNN(nn.Module):
         for layer in range(self.num_layers - 1):
             if layer == 0:
                 # self.edge_funcs.append(torch.nn.Linear(edge_feats, in_feats * hid_feats))
-                self.layers.append(EWConv(in_feats=in_feats, out_feats=hid_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type))
+                self.layers.append(EWConv(in_feats=in_feats, out_feats=hid_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type, device = device))
             else:
                 # self.edge_funcs.append(torch.nn.Linear(edge_feats, hid_feats*hid_feats))
-                self.layers.append(EWConv(in_feats=hid_feats, out_feats=hid_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type))
+                self.layers.append(EWConv(in_feats=hid_feats, out_feats=hid_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type, device = device))
         # self.edge_funcs.append(torch.nn.Linear(edge_feats, hid_feats * out_feats))
-        self.layers.append(EWConv(in_feats=hid_feats, out_feats=out_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type))
+        self.layers.append(EWConv(in_feats=hid_feats, out_feats=out_feats, edge_func = nn.Softmin(dim = 1), aggregator_type=aggregator_type, device = device))
             
         for layer in range(self.num_layers - 1):
             self.batch_norms.append(nn.BatchNorm1d((hid_feats)))
@@ -160,7 +187,7 @@ class GCN(nn.Module):
         for layer in range(self.num_layers - 1):
             self.batch_norms.append(nn.BatchNorm1d((hid_feats)))
             
-    def forward(self, graph, inputs, edge_feautes = None, batch_norm = True):
+    def forward(self, graph, inputs, edge_feautes = None, batch_norm = False):
         h = inputs
         for i in range(self.num_layers):
             if i != self.num_layers - 1:

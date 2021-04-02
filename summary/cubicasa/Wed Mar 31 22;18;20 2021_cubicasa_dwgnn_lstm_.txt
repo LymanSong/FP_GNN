@@ -1,0 +1,80 @@
+weights = torch.div(weights.squeeze(dim = 2), weights.sum(1)).unsqueeze(dim = 2)
+# soft_ed = m(weights)
+# soft_ed = m(scaler(weights))
+# soft_ed_ = m(scaler(weights))
+soft_ed = m(torch.FloatTensor(np.squeeze(np.apply_along_axis(scaling, 1, weights.cpu().numpy()), axis = 2))).to(self.device)
+
+----------------- Options ---------------
+          aggregator_type: lstm                          
+               checkpoint: ./checkpoint                  
+           continue_train: False                         
+                  dataset: cubicasa                      
+             dataset_load: True                          
+                   device: 0                             
+                   epochs: 200                           
+        feature_normalize: standard                      
+            final_dropout: 0.5                           
+                 fold_idx: 0                             
+                gnn_model: dwgnn                         
+               hidden_dim: 128                           
+               load_epoch: latest                        
+                       lr: 0.01                          
+               num_layers: 6                             
+           num_mlp_layers: 3                             
+             random_split: False                         
+            return_output: False                         
+                     seed: 0                             
+              summary_dir: ./summary                     
+             train_percen: 0.5                           
+----------------- End -------------------Epoch: 0021 loss_train: 0.0225 acc_train: 0.9948
+	    loss_test: 0.2048 acc_test: 0.9466
+Epoch: 0041 loss_train: 0.0247 acc_train: 0.9923
+	    loss_test: 0.2162 acc_test: 0.9538
+Epoch: 0061 loss_train: 0.0010 acc_train: 0.9998
+	    loss_test: 0.2396 acc_test: 0.9570
+Epoch: 0081 loss_train: 0.0023 acc_train: 0.9995
+	    loss_test: 0.2709 acc_test: 0.9530
+Epoch: 0101 loss_train: 0.0012 acc_train: 0.9998
+	    loss_test: 0.2412 acc_test: 0.9553
+Epoch: 0121 loss_train: 0.0006 acc_train: 0.9999
+	    loss_test: 0.2647 acc_test: 0.9559
+Epoch: 0141 loss_train: 0.0302 acc_train: 0.9907
+	    loss_test: 0.3069 acc_test: 0.9440
+Epoch: 0161 loss_train: 0.0004 acc_train: 0.9999
+	    loss_test: 0.2465 acc_test: 0.9596
+Epoch: 0181 loss_train: 0.0004 acc_train: 0.9999
+	    loss_test: 0.2590 acc_test: 0.9607
+Epoch: 0201 loss_train: 0.0003 acc_train: 0.9999
+	    loss_test: 0.2700 acc_test: 0.9604
+class 0[predict]: 8282, percentage: 0.4
+class 0[labeled]: 8144, percentage: 0.4
+class 1[predict]: 1698, percentage: 0.08
+class 1[labeled]: 1735, percentage: 0.08
+class 2[predict]: 4303, percentage: 0.21
+class 2[labeled]: 4305, percentage: 0.21
+class 3[predict]: 3239, percentage: 0.16
+class 3[labeled]: 3273, percentage: 0.16
+class 4[predict]: 1112, percentage: 0.05
+class 4[labeled]: 1083, percentage: 0.05
+class 5[predict]: 1321, percentage: 0.06
+class 5[labeled]: 1390, percentage: 0.07
+class 6[predict]:  190, percentage: 0.01
+class 6[labeled]:  198, percentage: 0.01
+class 7[predict]:  320, percentage: 0.02
+class 7[labeled]:  337, percentage: 0.02
+                      precision    recall  f1-score   support
+
+    class 0(objects)     0.9582    0.9745    0.9663      8144
+       class 1(wall)     0.9470    0.9268    0.9368      1735
+     class 2(window)     0.9870    0.9865    0.9868      4305
+       class 3(door)     0.9592    0.9493    0.9542      3273
+      class 4(stair)     0.9478    0.9732    0.9604      1083
+       class 5(room)     0.9394    0.8928    0.9155      1390
+      class 6(porch)     0.8474    0.8131    0.8299       198
+class 7(outer space)     0.9344    0.8872    0.9102       337
+
+            accuracy                         0.9603     20465
+           macro avg     0.9401    0.9254    0.9325     20465
+        weighted avg     0.9602    0.9603    0.9602     20465
+
+ best acc : 0.9607211124032217

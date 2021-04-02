@@ -61,7 +61,7 @@ def train(args, dataset, train_loader, test_loader, device, train_files, test_fi
     elif args.gnn_model == 'gcn':
         model = GCN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers).to(device)
     elif args.gnn_model == 'dwgnn':
-        model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
+        model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type, device = device).to(device)
     elif args.gnn_model == 'gin':
         model = GIN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers, num_mlp_layers = args.num_mlp_layers, aggregator_type = args.aggregator_type).to(device)
     if args.continue_train == True:
@@ -78,6 +78,7 @@ def train(args, dataset, train_loader, test_loader, device, train_files, test_fi
     
     start = time.time()
     print(session_record)
+    average_loss = 100
     pbar = tqdm(range(cur_epoch + 1, args.epochs + 1), desc = 'training...')
     for epoch in pbar:
         model.train()
@@ -110,7 +111,7 @@ def train(args, dataset, train_loader, test_loader, device, train_files, test_fi
         average_acc = acc_accum/iteration
         average_loss = loss_accum/iteration
         
-        if epoch % 50 == 0 or epoch == args.epochs:
+        if epoch%(args.epochs/10) == 0 or epoch == args.epochs:
             session_record += 'Epoch: {:04d} '.format(epoch + 1)
             session_record += 'loss_train: {:.4f} '.format(average_loss)
             session_record += 'acc_train: {:.4f}\n'.format(average_acc)
