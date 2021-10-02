@@ -57,7 +57,7 @@ def test(args, test_files, device, dataset, root_path, test = True):
     elif args.gnn_model == 'gcn':
         model = GCN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers).to(device)
     elif args.gnn_model == 'dwgnn':
-        model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type).to(device)
+        model = DWGNN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, edge_feats = 1, num_layers = args.num_layers, aggregator_type = args.aggregator_type, device = device).to(device)
     elif args.gnn_model == 'gin':
         model = GIN(in_feats=n_features, hid_feats=args.hidden_dim, out_feats=n_labels, num_layers = args.num_layers, num_mlp_layers = args.num_mlp_layers, aggregator_type = args.aggregator_type).to(device)
     
